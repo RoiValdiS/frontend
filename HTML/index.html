@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../data/ajaxCalls.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+            crossorigin="anonymous"></script>
+    <script src="../data/airBNB.js"></script>
+    <link href="../CSS/StyleSheet.css" rel="stylesheet" />
+    <script>
+        function init() {
+            let push1 = document.createElement('div');
+            push1.id = "pushy";
+            let header = document.createElement('div');
+            header.id = "header";
+            let logo = document.createElement('img');
+            logo.id = "logo";
+            logo.src = "../image/logo1.png";
+            let back = document.createElement("button");
+            back.innerHTML = "Log Out";
+            back.id = "back";
+            back.onclick = LogOut;
+            header.append(back);
+            header.append(logo);
+            let moveTo = document.createElement("input");
+            moveTo.type = "button";
+            moveTo.onclick = function () {
+                location.href = "manage.html";
+            }
+            moveTo.value = "Move To Manage Page";
+            moveTo.id = "move";
+            header.append(moveTo);
+            document.body.append(header);
+            document.body.append(push1);
+            let data = Arr;
+            for (let d in data) {
+                let div = document.createElement('div');
+                let img = document.createElement('img');
+                let price = document.createElement('p');
+                let name = document.createElement('h1');
+                name.style.height = "12%";
+                name.className = "namy";
+                let description = document.createElement('p');
+                let adress = document.createElement('p');
+                let rooms = document.createElement('p');
+                let score = document.createElement('p');
+                let but = document.createElement('input');
+                let ID = data[d].id;
+                div.id = data[d].id;
+                img.src = data[d].picture_url;
+                name.innerHTML = data[d].name;
+                price.innerHTML = data[d].price;
+                description.innerHTML = data[d].description;
+                adress.innerHTML = data[d].neighbourhood;
+                if (data[d].neighbourhood == undefined) {
+                    adress.innerHTML = "Amsterdam";
+                }
+                rooms.innerHTML = "Number Of Rooms : " + data[d].bedrooms;
+                score.innerHTML = "Score " + data[d].review_scores_rating;
+                but.type = "button";
+                but.value = "Add an Apartment";
+                but.onclick = into;
+                but.id = data[d].id;
+                but.className = "but";
+                let scr = document.createElement('div');
+                scr.id = "scr";
+
+                div.append(img);
+                div.append(name);
+                scr.append(price);
+                scr.append(adress);
+                scr.append(ID);
+                scr.append(score);
+                scr.append(rooms);
+                scr.append(description)
+                div.append(scr);
+                div.append(but);
+                document.body.append(div);
+            }
+        }
+        function into() {
+            let api = "https://proj.ruppin.ac.il/cgroup18/test2/tar1/api/Flats";
+            let data = Arr;
+            for (let d in data) {
+                if (data[d].id==this.id) {
+                    Flat = {
+                        id:data[d].id,
+                        city:"Amsterdam",
+                        adress:data[d].neighbourhood,
+                        price: Number(data[d].price.split('$')[1]),
+                        numOfRooms:data[d].bedrooms,
+                        imgURL:data[d].picture_url,
+                        apartmentName:data[d].name,
+                        reviewScore:data[d].review_scores_rating,
+                        description:data[d].description
+                    }
+                    if (data[d].adress == undefined) {
+                        Flat.adress = "Amsterdam";
+                    }
+                    ajaxCall("POST", api, JSON.stringify(Flat), successCB, errorCB)
+                    
+                }
+            }
+        }
+        function LogOut(){
+            location.href = "enterPage.html";
+        }
+        function successCB(data) {
+            console.log(data);
+            if (data==false) {
+                alert("The Apartment Already Exists");
+            }
+        }
+        function errorCB(err) {
+            alert(err);
+        }
+    </script>
+</head>
+<body onload="init()">
+
+</body>
+</html>

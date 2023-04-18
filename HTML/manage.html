@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../CSS/StyleSheet2.css" rel="stylesheet" />
+    <script src="../data/ajaxCalls.js"></script>
+    <script src="../data/airBNB.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+            crossorigin="anonymous"></script>
+    <script>
+        function LogOut() {
+            location.href = "index.html";
+        }
+        function inity() {
+            let h1 = document.createElement("h1");
+            h1.innerHTML = "Manage Page";
+            let back = document.createElement("button");
+            back.innerHTML = "Return";
+            back.id = "back";
+            back.onclick = LogOut;
+            let div = document.createElement('div');
+            div.id = "start";
+            let but1 = document.createElement('input');
+            let but2 = document.createElement('input');
+            let but3 = document.createElement('input');
+            but1.type = "button";
+            but1.onclick = showAll;
+            but2.type = "button";
+            but3.type = "button";
+            but1.value = "Show All Apartment";
+            but2.value = "Show All Apatment By Price";
+            but2.onclick = showPrice;
+            but3.value = "Show all apartment By Rating";
+            but3.onclick = showRate;
+            div.append(back);
+            div.append(h1);
+            div.append(but1);
+            div.append(but2);
+            div.append(but3);
+            document.body.append(div);
+        }
+        function showAll() {
+            let allAPI = "https://proj.ruppin.ac.il/cgroup18/test2/tar1/api/Flats";
+            ajaxCall("GET", allAPI, "", successCB, errorCB)
+        }
+      
+        function removeFrom() {
+            console.log(this.id);
+            let allAPI1 = "https://proj.ruppin.ac.il/cgroup18/test2/tar1/api/Flats/" +this.id;
+            ajaxCall("DELETE", allAPI1, "", successCB, errorCB)
+        }
+        function showPrice() {
+            document.body.innerHTML = "";
+            let h1 = document.createElement("h1");
+            h1.innerHTML = "Manage Page";
+            let back = document.createElement("button");
+            back.innerHTML = "Return";
+            back.id = "back";
+            back.onclick = LogOut;
+            let div = document.createElement('div');
+            div.append(back);
+            div.id = "start";
+            let but1 = document.createElement('input');
+            let but2 = document.createElement('input');
+            let but3 = document.createElement('input');
+            but1.type = "button";
+            but1.onclick = showAll;
+            but2.type = "button";
+            but2.onclick = showPrice;
+            but3.type = "button";
+            but1.value = "Show All Apartment";
+            but2.value = "Show All Apatment By Price";
+            but3.value = "Show all apartment By Rating";
+            but3.onclick = showRate;
+            div.append(h1);
+            div.append(but1);
+            div.append(but2);
+            div.append(but3);
+            let push1 = document.createElement('div');
+            push1.id = "pushy";
+            document.body.append(div);
+            document.body.append(push1);
+
+            let newP = document.createElement('input');
+            newP.type = "text";
+            newP.id = "texty";
+            let h = document.createElement('h1');
+            h.innerHTML = "please enter a Price :";
+            let b = document.createElement("input");
+            b.type = "button";
+            b.value = "Click to Show";
+            b.onclick = showByP;
+            let inp = document.createElement('div');
+            inp.append(h);
+            inp.id = "inp";
+            inp.append(newP);
+            inp.append(b);
+            document.body.append(inp);
+
+           
+        }
+        function containsOnlyNumbers(str) {
+            return /^(\d+.)*(\d+)$/.test(str);
+
+        }
+        function showByP() {
+            if (document.getElementById("texty").value=="") {
+                alert("please enter a price");
+                return;
+            }
+            let p = document.getElementById("texty").value;
+            if (containsOnlyNumbers(p) == false) {
+                alert("please insert only numbers!");
+                document.getElementById("texty").value = "";
+                return;
+            }
+            let allAPI1 = "https://proj.ruppin.ac.il/cgroup18/test2/tar1/api/Flats/GetByPrice?price="+p;
+            ajaxCall("GET", allAPI1, p, successCB, errorCB)
+        }
+        function showRate() {
+            document.body.innerHTML = "";
+            let h1 = document.createElement("h1");
+            h1.innerHTML = "Manage Page";
+            let div = document.createElement('div');
+            div.id = "start";
+            let back = document.createElement("button");
+            back.innerHTML = "Return";
+            back.id = "back";
+            back.onclick = LogOut;
+            div.append(back);
+            let but1 = document.createElement('input');
+            let but2 = document.createElement('input');
+            let but3 = document.createElement('input');
+            but1.type = "button";
+            but1.onclick = showAll;
+            but2.type = "button";
+            but2.onclick = showPrice;
+            but3.type = "button";
+            but1.value = "Show All Apartment";
+            but2.value = "Show All Apatment By Price";
+            but3.value = "Show all apartment By Rating";
+            but3.onclick = showRate;
+            div.append(h1);
+            div.append(but1);
+            div.append(but2);
+            div.append(but3);
+            let push1 = document.createElement('div');
+            push1.id = "pushy";
+            document.body.append(div);
+            document.body.append(push1);
+            let newP = document.createElement('input');
+            newP.type = "text";
+            newP.id = "texty";
+            let h = document.createElement('h1');
+            h.innerHTML = "please enter a Rate :";
+            let b = document.createElement("input");
+            b.type = "button";
+            b.value = "Click to Show";
+            b.onclick = showByR;
+            let inp = document.createElement('div');
+            inp.append(h);
+            inp.id = "inp";
+            inp.append(newP);
+            inp.append(b);
+            document.body.append(inp);
+        }
+        function showByR() {
+
+            if (document.getElementById("texty").value == "") {
+                alert("please enter a price");
+                return;
+            }
+            let p = document.getElementById("texty").value;
+            if (containsOnlyNumbers(p) == false) {
+                alert("please insert only numbers!");
+                document.getElementById("texty").value = "";
+                return;
+            }
+            let allAPI2 = "https://proj.ruppin.ac.il/cgroup18/test2/tar1/api/Flats/GetByCityRating/city/"+"Amsterdam"+"/reviewScore/" + p;
+            ajaxCall("GET", allAPI2, p, successCB, errorCB)
+
+
+
+        }
+        function successCB(data) {
+            console.log(data);
+            document.body.innerHTML = "";
+            let back = document.createElement("button");
+            back.innerHTML = "Return";
+            back.id = "back";
+            back.onclick = LogOut;
+            let h1 = document.createElement("h1");
+            h1.innerHTML = "Manage Page";
+            let div = document.createElement('div');
+            div.id = "start";
+            let but1 = document.createElement('input');
+            let but2 = document.createElement('input');
+            let but3 = document.createElement('input');
+            but1.type = "button";
+            but1.onclick = showAll;
+            but2.type = "button";
+            but2.onclick = showPrice;
+            but3.type = "button";
+            but1.value = "Show All Apartment";
+            but2.value = "Show All Apatment By Price";
+            but3.value = "Show all apartment By Rating";
+            but3.onclick = showRate;
+            div.append(back);
+            div.append(h1);
+            div.append(but1);
+            div.append(but2);
+            div.append(but3);
+            let push1 = document.createElement('div');
+            push1.id = "pushy";
+            document.body.append(div);
+            document.body.append(push1);
+            if (data.length == 0) {
+                alert("there is no apartment that saved");
+            }
+            for (let d in data) {
+                let div = document.createElement('div');
+              
+                let img = document.createElement('img');
+                let name = document.createElement('h1');
+                let description = document.createElement('p');
+                let adress = document.createElement('p');
+                let rooms = document.createElement('p');
+                let score = document.createElement('p');
+                let pr1 = document.createElement('p');
+                pr1.innerHTML = data[d].price+"$";
+                let ID = data[d].id;
+                div.id = data[d].id;
+                img.src = data[d].imgURL;
+                name.innerHTML = data[d].apartmentName;
+                name.style.height = "12%";
+                description.innerHTML = data[d].description;
+                adress.innerHTML = data[d].adress;
+                if (data[d].neighbourhood == undefined) {
+                    adress.innerHTML = "Amsterdam";
+                }
+                rooms.innerHTML = "Number Of Rooms : " + data[d].numOfRooms;
+                score.innerHTML = "Score " + data[d].reviewScore;
+                let but = document.createElement('input');
+                but.type = "button";
+                
+                but.value = "Remove From Data";
+   
+                but.onclick = removeFrom;
+                but.className = "buty";
+                let scr = document.createElement('div');
+                scr.id = "scr";
+                but.id = data[d].id;
+                div.append(img);
+                div.append(name);
+                scr.append(pr1);
+                scr.append(adress);
+                scr.append(ID);
+                scr.append(score);
+                scr.append(rooms);
+                scr.append(description)
+                div.append(scr);
+                div.append(but);
+                document.body.append(div);
+
+            }
+        }
+        function errorCB(err) {
+            alert(err);
+        }
+    </script>
+</head>
+<body onload="inity()">
+    
+</body>
+</html>

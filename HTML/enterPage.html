@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="../data/ajaxCalls.js"></script>
+    <script src="../data/airBNB.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+            crossorigin="anonymous"></script>
+    <title></title>
+    <link href="../CSS/StyleSheet3.css" rel="stylesheet" />
+    <script>
+        /*finaly*/
+        $(document).ready(function () {
+            $("#mainForm").submit(submitToTheServer);
+            $("#email").on("blur", checkCode);
+        });
+        function submitToTheServer() {
+            Log();
+            return false;
+        }
+        function Log() {
+            let api = 'https://localhost:7092/api/Users/LogIn/email/' + ((document).myForm.email.value);
+            ajaxCall("POST", api, JSON.stringify(document.myForm.password.value), successCB, errorCB);
+            
+        }
+        function successCB(data) {
+            console.log(data);
+            location.href = "index.html";
+            
+        }
+        function errorCB(err) {
+            console.log(err);
+            alert("The User Dosent Exists in the System");
+            document.myForm.email.validity.valid = false;
+            document.myForm.email.value = "";
+            document.myForm.password.validity.valid = false;
+            document.myForm.password.value = "";
+            
+        }
+        function checkCode() {
+            if ((this.value.match(/(^[a-zA-Z0-9_.]+[@]{1}[a-z0-9]+[\.][a-z]+$)/mg)) == null) {
+                this.validity.valid = false; 
+                this.setCustomValidity('Wrong Email Format');
+            }
+            else {
+                this.validity.valid = true;
+                this.setCustomValidity('');
+            }
+        }
+        function Sign() {
+            location.href = "SignUp.html";
+        }
+    </script>
+</head>
+<body>
+    <div id="head">
+       
+        <form id="mainForm" name="myForm">
+        <h1 id="logH1">User Log In</h1>
+            <table>
+                <tr>
+                    <td colspan="2"><input type="text" name="email" id="email" placeholder="Email" required></td>
+  
+
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="password" name="password" id="password" placeholder="Password" required></td>
+
+                </tr>
+                <tr>
+                    <td ><input type="submit"  value="Submit"></td>
+                    <td><button onclick="Sign()">Sign Up</button></td>
+
+                    
+                </tr>
+
+            </table> </form>
+       
+
+
+    </div>
+</body>
+</html>

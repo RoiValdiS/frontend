@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="../data/ajaxCalls.js"></script>
+    <script src="../data/airBNB.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+            crossorigin="anonymous"></script>
+    <title></title>
+    <link href="../CSS/StyleSheet4.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $("#mainForm").submit(submitToTheServer);
+            $("#email").on("blur", checkCode);
+        });
+        function submitToTheServer() {
+            Log();
+            return false;
+        }
+        function Log() {
+            let api1 = 'https://localhost:7092/api/Users/Registration';
+            Users = {
+                Id: document.myForm.id.value,
+                country: document.myForm.country.value,
+                email: document.myForm.email.value,
+                password: document.myForm.password.value,
+                phoneNumber: document.myForm.phone.value,
+            }
+            console.log(Users);
+            ajaxCall("POST", api1, JSON.stringify(Users), successCB, errorCB);
+
+        }
+        function successCB(data) {
+            console.log(data);
+            if (data==false) {
+                document.myForm.id.value = "";
+                document.myForm.country.value = "";
+                document.myForm.email.value = "";
+                document.myForm.password.value = "";
+                document.myForm.phone.value = "";
+                alert("User Already Exists");
+            }
+            else {
+                document.myForm.id.value = "";
+                document.myForm.country.value = "";
+                document.myForm.email.value = "";
+                document.myForm.password.value = "";
+                document.myForm.phone.value = "";
+                location.href = "enterPage.html";
+            }
+        }
+        function errorCB(err) {
+            alert(err);
+        }
+        function checkCode() {
+            if ((this.value.match(/(^[a-zA-Z0-9_.]+[@]{1}[a-z0-9]+[\.][a-z]+$)/mg)) == null) {
+                this.validity.valid = false;
+                this.setCustomValidity('Wrong Email Format');
+            }
+            else {
+                this.validity.valid = true;
+                this.setCustomValidity('');
+            }
+        }
+        function backTo() {
+            document.myForm.id.value = "";
+            document.myForm.country.value = "";
+            document.myForm.email.value = "";
+            document.myForm.password.value = "";
+            document.myForm.phone.value = "";
+            location.href = "enterPage.html";
+           
+        }
+    </script>
+</head>
+<body>
+        <button id="back" onclick="backTo()">Log In Page</button>
+    <div id="head">
+        <h1 id="logH1">Sign Up</h1>
+
+        <form id="mainForm" name="myForm">
+            <table>
+                <tr>
+                    <td>ID:</td>
+                    <td></td>
+                    <td><input type="id" name="id" class="form-control" placeholder="Enter 9 Digtis ID" 
+                          pattern="[0-9]{9}"
+                           oninvalid="this.setCustomValidity('Format should be 9 DIGITS')"
+                           oninput="this.setCustomValidity('')" /></td>
+                </tr>
+                <tr>
+                    <td>Country:</td>
+                    <td></td>
+                    <td><input  type="text" name="country" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" required></td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td></td>
+                    <td><input type="email" name="email" id="email" required></td>
+                </tr>
+                <tr>
+                    <td>Password:</td>
+                    <td></td>
+                    <td><input type="password" name="password" id="password" required></td>
+                </tr>
+                <tr>
+                    <td>Phont Number:</td>
+                    <td></td>
+                    <td><input type="tel" class="form-control"  name="phone" id="dealerPhone"
+       pattern="[0-9]{10}"
+       oninvalid="this.setCustomValidity('Format should be dddddddddd')"
+       oninput="this.setCustomValidity('')" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><input type="submit"  value="Sign Up" id="sub"></td>
+                </tr>
+            </table>
+        </form>
+
+
+
+    </div>
+</body>
+</html>
